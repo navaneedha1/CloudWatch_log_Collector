@@ -1,7 +1,6 @@
-# Date Created: Jun 26 2020
 # Purpose: Get CloudWatch CPUUtilization and mem_used_percent EC2 metric data and write to S3 in CSV format. Intent
 #          is to use this script to extend the functionality so usage metrics could be included.
-#          In the context of that tool, this script would be made into a Lambda in the architecture.
+#          In the context of the tool, this script would be made into a Lambda in the architecture.
 #
 # Execution Requirements:
 # 1. Underlying Python/AWSCLI environment configured with  an IAM user in the organization's root account. In other
@@ -16,8 +15,6 @@
 # 3. The target S3 bucket should have a bucket policy that only allows the IAM user in the Org root account running this
 #    script to write to it.
 
-# TODO: Format metric data, create a CSV file in the target S3 bucket if it doesn't already exist,
-# otherwise, append the data to the CSV.
 import io
 
 import boto3
@@ -34,7 +31,7 @@ metricPeriod = 300
 pageSize = 500
 endTime = datetime.now()
 startTime = datetime.now() - timedelta(hours=1)
-bucketName = "cwdata101"
+bucketName = "Bucket_Name"
 regionList = ["us-west-2"]
 
 
@@ -204,13 +201,11 @@ def collectMetrics(cw_client, region):
 orgClient = boto3.client('organizations')
 
 # Build list of account IDs in the Org
-# accountList = []
-# accountDict = orgClient.list_accounts()
+ accountList = []
+ accountDict = orgClient.list_accounts()
 
-# for account in accountDict['Accounts']:
-#    accountList.append(account['Id'])
-
-accountList = ["810835092760"]
+ for account in accountDict['Accounts']:
+    accountList.append(account['Id'])
 
 # For each account
 for accountId in accountList:
@@ -224,23 +219,23 @@ for accountId in accountList:
     # because it does not follow the principle of least privilege. The point is to make sure whatever role used is the
     # same role across all accounts in the Org and only has the permissions it needs to accomplish its task. In this
     # case, the role is named 'OrganizationTREXAccessRole'.
-    # assumed_role_object = sts_client.assume_role(
-    #    RoleArn="arn:aws:iam::" + accountId + ":role/OrganizationAccountAccessRole",
-    #   RoleSessionName="Session-" + accountId,
-    #   DurationSeconds=3600  # 3600s = 1h
-    # )
+     assumed_role_object = sts_client.assume_role(
+        RoleArn="arn:aws:iam::" + accountId + ":role/OrganizationAccountAccessRole",
+       RoleSessionName="Session-" + accountId,
+       DurationSeconds=3600  # 3600s = 1h
+     )
 
     # Store credentials of the assumed role
-    #credentials = assumed_role_object['Credentials']
+    credentials = assumed_role_object['Credentials']
 
     print(accountId)  # - here for debugging purposes
 
     # Initiate CloudWatch client in the same region as the EC2 instances
     cw_client = boto3.client(
         'cloudwatch'
-        # aws_access_key_id=credentials['AccessKeyId'],
-        # aws_secret_access_key=credentials['SecretAccessKey'],
-        # aws_session_token=credentials['SessionToken']
+         aws_access_key_id=credentials['AccessKeyId'],
+         aws_secret_access_key=credentials['SecretAccessKey'],
+         aws_session_token=credentials['SessionToken']
     )
     response = cw_client.list_metrics()
 
