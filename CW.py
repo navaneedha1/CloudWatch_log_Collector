@@ -54,7 +54,7 @@ def processMetricResults(cw_client, metrics,filename,namespace):
                     },
                     'Period': metricPeriod,
                     'Stat': 'Average'
-                    # TO DO - Need the ability to "overide this stat", based on a Namespace,Dimension,Metric in a "config"
+                   
                 },
             }
         );
@@ -75,7 +75,6 @@ def processMetricResults(cw_client, metrics,filename,namespace):
         },
     )
 
-    # TO DO - Need to add code to get "MetricId" from metricDataQueries so we know the Metric/Dimension headers
 
     appended_data = []
 
@@ -150,21 +149,21 @@ def collectMetrics(cw_client, region):
     filename = 'ContainerInsights'
     listMetrics(cw_client, dimensions, metrics, namespace, filename)
 
-    # #  Metrics in DirectConnect Namespace
+    #  Metrics in DirectConnect Namespace
     dimensions = [{'Name': 'ConnectionId'}]
     metrics = 'ConnectionState'
     namespace = 'AWS/DX'
     filename = 'DX_ConnectionState'
     listMetrics(cw_client, dimensions, metrics, namespace, filename)
 
-    #  #  Metrics in s3 AllRequests Namespace
+    #  Metrics in s3 AllRequests Namespace
     dimensions = [{'Name': 'BucketName', 'Name': 'StorageType'}]
     metrics = 'AllRequests'
     namespace = 'AWS/S3'
     filename = 'S3_BucketSizeBytes'
     listMetrics(cw_client, dimensions,metrics, namespace, filename)
 
-    # #  Metrics in DynamoDB AccountProvisionedReadCapacityUtilization Namespace
+    # Metrics in DynamoDB AccountProvisionedReadCapacityUtilization Namespace
     dimensions = [{'Name':'TableName'}]
     metrics='ProvisionedReadCapacityUnits'
     namespace = 'AWS/DynamoDB'
@@ -228,7 +227,7 @@ for accountId in accountList:
     # Store credentials of the assumed role
     credentials = assumed_role_object['Credentials']
 
-    print(accountId)  # - here for debugging purposes
+    print(accountId)  # for debugging purposes
 
     # Initiate CloudWatch client in the same region as the EC2 instances
     cw_client = boto3.client(
