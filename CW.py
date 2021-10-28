@@ -232,7 +232,7 @@ for accountId in accountList:
 
     # Initiate CloudWatch client in the same region as the EC2 instances
     cw_client = boto3.client(
-        'cloudwatch'
+        'cloudwatch',
          aws_access_key_id=credentials['AccessKeyId'],
          aws_secret_access_key=credentials['SecretAccessKey'],
          aws_session_token=credentials['SessionToken']
