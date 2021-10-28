@@ -1,6 +1,7 @@
-# Purpose: Get CloudWatch CPUUtilization and mem_used_percent EC2 metric data, number of Amazon WorkSpaces, AWS Direct Connect(DX) in Connected state, Amazon DynamoDB capacity utilization and finally write to S3 in CSV format. Intent
-#          is to use this script to extend the functionality so usage metrics could be included.
-#          In the context of the tool, this script would be made into a Lambda in the architecture.
+# Purpose: Get CloudWatch CPUUtilization and mem_used_percent EC2 metric data, number of Amazon WorkSpaces, AWS Direct Connect(DX) in Connected state,
+# Amazon DynamoDB capacity utilization and finally write to S3 in CSV format. Intent
+# is to use this script to extend the functionality so usage metrics could be included.
+# In the context of the tool, this script would be made into a Lambda in the architecture.
 #
 # Execution Requirements:
 # 1. Underlying Python/AWSCLI environment configured with  an IAM user in the organization's root account. In other
