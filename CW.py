@@ -32,7 +32,7 @@ pageSize = 500
 endTime = datetime.now()
 startTime = datetime.now() - timedelta(hours=1)
 bucketName = "Bucket_Name"
-regionList = ["us-west-2"]
+regionList = [] # e.g ["us-west-2"]
 
 
 def processMetricResults(cw_client, metrics,filename,namespace):
